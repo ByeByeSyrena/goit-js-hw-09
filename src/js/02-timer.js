@@ -52,12 +52,12 @@ const options = {
 
 flatpickr("input[id=datetime-picker]", options);
 
-btnStart.addEventListener("click", onBtn, options);
+btnStart.addEventListener("click", onBtn);
 
 function onBtn(event) {
-
-    const count = setInterval(() => {
-        options.onClose(selectedDates[0]) -= options.minuteIncrement;
+const currentDate = inputDate.value;
+const timerId = setIntervalsetInterval(() => {
+    currentDate -= timeLeft;
     }, 1000);
     
     showDays.textContent = timeLeft.days;
