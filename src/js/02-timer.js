@@ -28,7 +28,6 @@ const timeLeft = function convertMs(ms) {
     return { days, hours, minutes, seconds };
 }
 
-
 btnStart.setAttribute('disabled', true);
 
 const options = {
@@ -47,19 +46,19 @@ const options = {
     ) {
         btnStart.removeAttribute('disabled');
         btnStart.setAttribute('enabled', true);
-      }
+      };
     },
 };
 
 flatpickr("input[id=datetime-picker]", options);
 
-btnStart.addEventListener("click", onBtn);
+btnStart.addEventListener("click", onBtn, options);
 
 function onBtn(event) {
 
-    setInterval(() => {
+    const count = setInterval(() => {
         options.onClose(selectedDates[0]) -= options.minuteIncrement;
-    });
+    }, 1000);
     
     showDays.textContent = timeLeft.days;
     showHours.textContent = timeLeft.hours;
