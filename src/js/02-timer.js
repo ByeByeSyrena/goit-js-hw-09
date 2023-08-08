@@ -56,7 +56,7 @@ btnStart.addEventListener("click", onBtn);
 
 function onBtn(event) {
 const currentDate = inputDate.value;
-const timerId = setIntervalsetInterval(() => {
+const timerId = setInterval(() => {
     currentDate -= timeLeft;
     }, 1000);
     
