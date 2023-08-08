@@ -9,7 +9,7 @@ const showHours = document.querySelector('span[data-hours]');
 const showMinutes = document.querySelector('span[data-minutes]');
 const showSeconds = document.querySelector('span[data-seconds]');
 
-const timeLeft = function convertMs(ms) {
+const convertMs = (ms) => {
     // Number of milliseconds per unit of time
     const second = 1000;
     const minute = second * 60;
@@ -30,23 +30,25 @@ const timeLeft = function convertMs(ms) {
 
 btnStart.setAttribute('disabled', true);
 
+let userDate = null;
+let timerId = null;
+
 const options = {
   enableTime: true,
   time_24hr: true,
   defaultDate: new Date(),
     minuteIncrement: 1,
   onClose(selectedDates) {
-      console.log(selectedDates[0]);    
-      if (
-          selectedDates[0] < new Date()
-    ) {
-    alert("Please choose a date in the future");
-      } else if(
-          selectedDates[0] >= new Date()
-    ) {
-        btnStart.removeAttribute('disabled');
-        btnStart.setAttribute('enabled', true);
+      console.log(selectedDates[0]);   
+      
+      if (selectedDates[0] <= new Date()) {
+          Notiflix.Notify.failure("Please choose a date in the future");
+          return;
       };
+
+      userDate = selectedDates[0];
+
+    btnStart.removeAttribute('disabled');
     },
 };
 
@@ -55,14 +57,26 @@ flatpickr("input[id=datetime-picker]", options);
 btnStart.addEventListener("click", onBtn);
 
 function onBtn(event) {
-const currentDate = inputDate.value;
-const timerId = setInterval(() => {
-    currentDate -= timeLeft;
-    }, 1000);
-    
-    showDays.textContent = timeLeft.days;
-    showHours.textContent = timeLeft.hours;
-    showMinutes.textContent = timeLeft.minutes;
-    showSecondstextContent = timeLeft.seconds;
-}
 
+    timerId = setInterval(() => {
+
+    const dif = userDate - new Date();
+    if (dif <= 0) { clearInterval(timerId); return; }
+
+const { days, hours, minutes, seconds } = convertMs(dif);
+    showDays.textContent = days;
+    showHours.textContent = hours;
+    showMinutes.textContent = minutes;
+    showSeconds.textContent = seconds;
+        
+    showDays.textContent = addLeadingZero(days);
+    showHours.textContent = addLeadingZero(hours);
+    showMinutes.textContent = addLeadingZero(minutes);
+    showSeconds.textContent = addLeadingZero(seconds);
+    }, 1000);
+};
+
+
+function addLeadingZero(value) {
+  return `${value}`.padStart(2, '0');
+}
