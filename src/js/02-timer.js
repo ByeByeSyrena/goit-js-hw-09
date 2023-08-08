@@ -80,3 +80,13 @@ const { days, hours, minutes, seconds } = convertMs(dif);
 function addLeadingZero(value) {
   return `${value}`.padStart(2, '0');
 }
+
+
+const divTimer = document.querySelector('.timer');
+btnStart.style.backgroundColor = "teal";
+btnStart.style.fontSize = "24px";
+btnStart.style.color = "white";
+divTimer.style.display = "flex";
+divTimer.style.justifyContent = "space-evenly";
+divTimer.style.marginTop = "48px"
+divTimer.style.color = "teal";
