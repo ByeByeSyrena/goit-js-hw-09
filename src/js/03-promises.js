@@ -9,11 +9,11 @@ function onSubmitForm(event) {
   const { delay, step, amount } = event.currentTarget.elements;
 
   if (delay.value < 0 || step.value < 0 || amount.value < 0) {
-    Notiflix.Notify.warning(`❗ Only positive numbers`);
+    Notiflix.Notify.warning(`❗ Please enter a positive number`);
   } else {
-    for (let i = 1; i < amount.value; i++) {
-      let position = i;
-      const delays = delay.value + step.value * i;
+    for (let i = 0; i < amount.value; i++) {
+      let position = i + 1;
+      const delays = Number(delay.value) + step.value * i;
 
       createPromise(position, delays)
         .then(({ position, delay }) => {
@@ -44,7 +44,4 @@ function createPromise(position, delay) {
       }
     }, delay);
   });
-}
-
-
-
+};
