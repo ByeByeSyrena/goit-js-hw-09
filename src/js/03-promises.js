@@ -1,61 +1,50 @@
 import Notiflix from 'notiflix';
 
-const form = document.querySelector(".form");
-const submitBtn = document.querySelector("button[type='submit']");
+const form = document.querySelector('.form');
 
-const refs = {
-userDelay: form.elements.delay.value,
-userStep: form.elements.step.value,
-userAmount: form.elements.amount.value,
-}
+form.addEventListener('submit', onSubmitForm);
 
-let delays = null;
-let position = null;
-
-let object = {
-  position: position,
-  delay: delays,
-}
-
-form.addEventListener("submit", submitForm);
-
-const promise = new Promise((resolve, reject) => {
-  setTimeout(() => {
-    const { position, delay } = object;
-    const shouldResolve = Math.random() > 0.3;
-    if (shouldResolve) {
-      resolve({ position, delay });
-    } else {
-      reject({ position, delay });
-    }
-  }, refs.userDelay);
-});
-
-
-function submitForm(event) { 
-
+function onSubmitForm(event) {
   event.preventDefault();
+  const { delay, step, amount } = event.currentTarget.elements;
 
-  const { userDelay, userStep, userAmount } = refs;
-
-  if (userDelay < 0 || userStep < 0 || userAmount < 0) {
-    Notiflix.Notify.warning(`❌ Only positive numbers`);
+  if (delay.value < 0 || step.value < 0 || amount.value < 0) {
+    Notiflix.Notify.warning(`❗ Only positive numbers`);
   } else {
-    for (let i = 0; i <= userAmount; i += 1) {
-   const position = i + 1;
-   delays = userDelay + userStep * i;
-   
-      promise
-        .then(({ position, delay }) => Notiflix.Notify.success(
-        `✅ Fulfilled promise ${position} in ${userDelay}ms`
-        ))
-      .catch(({ position, delays }) =>
+    for (let i = 1; i < amount.value; i++) {
+      let position = i;
+      const delays = delay.value + step.value * i;
+
+      createPromise(position, delays)
+        .then(({ position, delay }) => {
+          Notiflix.Notify.success(
+            `✅ Fulfilled promise ${position} in ${delay}ms`
+          );
+        })
+        .catch(({ position, delay }) => {
           Notiflix.Notify.failure(
-            `❌ Rejected promise ${position} in ${userDelay}ms`
-          ))
-     };
-   };
-};
+            `❌ Rejected promise ${position} in ${delay}ms`
+          );
+        });
+    }
+  }
+
+  event.currentTarget.reset();
+}
+
+function createPromise(position, delay) {
+  return new Promise((resolve, reject) => {
+    const shouldResolve = Math.random() > 0.3;
+
+    setTimeout(() => {
+      if (shouldResolve) {
+        resolve({ position, delay });
+      } else {
+        reject({ position, delay });
+      }
+    }, delay);
+  });
+}
 
 
 
