@@ -24,14 +24,14 @@ function submitForm(event) {
    const position = i + 1;
     const delays = userDelay + userStep * i;
 
-      createPromise(position, delays); 
+    const promiseNew = createPromise(position, delays); 
 
-        promise.then((position, userDelay) => {
+    promiseNew.then((position, delays) => {
           Notiflix.Notify.success(
             `✅ Fulfilled promise ${position} in ${userDelay}ms`
           );
         })
-        .catch((position, userDelay) => {
+        .catch((position, delays) => {
           Notiflix.Notify.failure(
             `❌ Rejected promise ${position} in ${userDelay}ms`
           );
